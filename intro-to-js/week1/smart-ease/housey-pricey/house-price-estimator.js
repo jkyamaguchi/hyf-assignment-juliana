@@ -9,8 +9,7 @@ function estimateHousePrice(
   houseDepth,
   gardenSizeInM2
 ) {
-  let volumeInMeters;
-  volumeInMeters = houseWidth * houseHeight * houseDepth;
+  const volumeInMeters = houseWidth * houseHeight * houseDepth;
   return volumeInMeters * 2.5 * 1000 + gardenSizeInM2 * 300;
 }
 
