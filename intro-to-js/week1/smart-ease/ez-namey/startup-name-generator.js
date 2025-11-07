@@ -26,9 +26,14 @@ const secondWords = [
 
 let startupName;
 
+//Parameter range as the length of the array
+function getRandomNumber(range){
+  return Math.floor(Math.random() * range);
+}
+
 function generateStartupName() {
-  const randomNumber1 = Math.floor(Math.random() * 10);
-  const randomNumber2 = Math.floor(Math.random() * 10);
+  const randomNumber1 = getRandomNumber(firstWords.length);
+  const randomNumber2 = getRandomNumber(secondWords.length);;
 
   return firstWords[randomNumber1] + " " + secondWords[randomNumber2];
 }
