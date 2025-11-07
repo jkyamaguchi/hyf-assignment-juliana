@@ -1,4 +1,5 @@
-let dogYearOfBirth, dogYearFuture, dogYear;
+const dogYearFuture = 2027;
+const dogYearOfBirth = 2020;
 const shouldShowResultInDogYears = false;
 
 function calculateAge(dogYearOfBirth, dogYearFuture) {
@@ -9,10 +10,7 @@ function calculateAge(dogYearOfBirth, dogYearFuture) {
   }
 }
 
-dogYearFuture = 2027;
-dogYearOfBirth = 2020;
-
-dogYear = calculateAge(dogYearOfBirth, dogYearFuture);
+const dogYear = calculateAge(dogYearOfBirth, dogYearFuture);
 
 function showConsoleMessage() {
   if (shouldShowResultInDogYears) {
