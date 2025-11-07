@@ -1,7 +1,3 @@
-let yearOfBirth;
-let yearFuture;
-let age;
-
 function calculateAge(yearOfBirth, yearFuture) {
   return yearFuture - yearOfBirth;
 }
