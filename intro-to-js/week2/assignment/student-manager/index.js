@@ -26,80 +26,79 @@ function isClassFilledOut(className) {
 }
 
 function addStudentToClass(studentName, className) {
-  if (isValidateStudent(studentName)) {
-    if (!isStudentEnrolled(studentName, className)){
-      if (!isClassFilledOut(className)) {
-        className.push(studentName);
-      }
-      else{
-        console.log(`No registration for ${studentName}. The class is filled out.`);  
-      }
-    } else {
-      console.log(`The student ${studentName} was already enrolled to this class.`);
-    }
-  } else {
+  if (!isValidateStudent(studentName)) {
     console.log(`Student name is empty or not valid.`);
+    return;
   }
-}
 
-// Considering there is only one queen.
-function addTheQueen(queenName, className) {
-  console.log(`Registering Queen ${queenName}.`);
-  //If the class is full, remove the last student and add the queen.
+  // Anything past this point is a valid student, so you don't need to check again
+
+  if (isStudentEnrolled(studentName, className)) {
+    console.log(
+      `The student ${studentName} was already enrolled to this class.`
+    );
+    return;
+  }
+
+  // Anything after here is an enrolled student.
+
   if (isClassFilledOut(className)) {
-    className.pop();
+    // But is the Queen
+    if (studentName.includes("Queen")) {
+      console.log(`Registering ${studentName}.`);
+      className.push(studentName);
+      return;
+    }
+
+    console.log(`No registration for ${studentName}. The class is filled out.`);
+    return;
   }
-  addStudentToClass(queenName, className);
+
+  // Anything after here is a valid registration.
+
+  // Add the student if all the "checkpoints" are passed
+  className.push(studentName);
 }
 
+// Instead of specifying who the queen is,
+// we could have also done it based on name matching for example.
+// But ... if a non-royal person is named with the same name of the queen?
+// In order to unify the addStudent logic between plebe and queen,
+// the treatment 'Queen' must be in the name.
 const students = [
   {
     name: "Maria",
-    isQueen: false,
   },
   {
     name: "Helen",
-    isQueen: false,
   },
   {
     name: "",
-    isQueen: false,
   },
   {
     name: "Cecilia",
-    isQueen: false,
   },
   {
     name: "Maria",
-    isQueen: false,
   },
   {
     name: "Ana",
-    isQueen: false,
   },
   {
     name: "Mariana",
-    isQueen: false,
   },
   {
     name: "Tereza",
-    isQueen: false,
   },
   {
     name: "Laura",
-    isQueen: false,
   },
   {
-    name: "Kimie",
-    isQueen: true,
+    name: "Queen Kimie",
   },
 ];
 
 for (student of students) {
-  if (!student.isQueen) {
-    addStudentToClass(student.name, class07Students);
-  } else {
-    addTheQueen(student.name, class07Students);
-  }
+  addStudentToClass(student.name, class07Students);
   console.log(`Class: `, class07Students);
 }
