@@ -50,7 +50,13 @@ const contacts = [
  * If useFormalName is not given as an argument, shows only first and last name.
  */
 function getFullName(firstName, lastName, useFormalName, formalName) {
-  if (formalName !== "" && formalName !== null && useFormalName) {
+  //the loose condition checking in javascript would treat:
+  // "" -> false
+  // null -> false
+  // undefined -> false.
+  // If the property is removed from one of the contacts, 
+  // it would be undefined, and your formalName === undefined won't match.
+  if (formalName && useFormalName) {
     return `${formalName} ${firstName} ${lastName}`;
   } else {
     return `${firstName} ${lastName}`;
