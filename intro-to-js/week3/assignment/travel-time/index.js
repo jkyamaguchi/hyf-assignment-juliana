@@ -3,8 +3,6 @@ const travelInformation = {
   destinationDistance: 432,
 };
 
-const travelTime = calculateTravelTime(travelInformation);
-
 function calculateTravelTime(travelInformation){
     const hours = travelInformation.destinationDistance / travelInformation.speed;
     return timeConvert(hours);
@@ -20,5 +18,7 @@ function timeConvert(hours) {
   // Construct and return a string representing the conversion result
   return fullHours + " hour(s) and " + roundedMinutes + " minute(s).";
 }
+
+const travelTime = calculateTravelTime(travelInformation);
 
 console.log(travelTime); // 8 hours and 38 minutes
