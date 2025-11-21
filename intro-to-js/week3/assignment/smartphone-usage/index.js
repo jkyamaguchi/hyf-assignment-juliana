@@ -17,19 +17,9 @@ addActivity("Facebook", 20, activityDay);
 
 console.log(activities);
 
-function printActivities(){
-  console.log("*** ALL ACTIVITIES ***");
-  for(let item of activities){
-    console.log(`date: ${item.date} - activity: ${item.activity} - duration: ${item.duration}`);
-  }
-}
-
-printActivities();
-
 // Show activities of the day
 function showStatus(activities){
-  console.log("*** STATUS TODAY ***")
-  if (activities.length === 0){
+  if (!activities.length){ //activities.length === 0
     console.log("Add some activities before calling showStatus");
     return;
   }
@@ -43,9 +33,10 @@ function showStatus(activities){
     let day = new Date(item.date).getTime();
     // If date is stored as DD/MM/YYYY (new Date().toLocaleDateString()), it results in NaN.
     // But if it uses "en-US", like new Date().toLocaleDateString("en-US"), works. Why? 
-    console.log("DAY:", day , "CURRENT DAY:", currentDay); 
-    console.log("DATE COMPARISON:", day  < currentDay)
+    // console.log("DAY:", day , "CURRENT DAY:", currentDay); 
+    // console.log("DATE COMPARISON:", day  < currentDay)
     
+    // Skip past activities — we only count durations for activities from today.
     if (day < currentDay){
       continue;
     }
@@ -63,9 +54,7 @@ function showStatus(activities){
 showStatus(activities);
 addActivity("WhatsApp", 10, activityDay);
 
-printActivities();
 showStatus(activities);
 
 addActivity("Games", 30);
-printActivities();
 showStatus(activities);
