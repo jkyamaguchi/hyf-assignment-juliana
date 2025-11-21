@@ -19,6 +19,7 @@ function timeConvert(hours) {
   return fullHours + " hour(s) and " + roundedMinutes + " minute(s).";
 }
 
+// First declare function and then call
 const travelTime = calculateTravelTime(travelInformation);
 
 console.log(travelTime); // 8 hours and 38 minutes
