@@ -21,28 +21,42 @@ function logOutNotesFormatted() {
 logOutNotesFormatted();
 
 function getNote(id) {
-  const result = notes.find((obj) => obj.id == id);
+  if (id === undefined || id === null) {
+    return null;
+  }
+  const result = notes.find((obj) => obj.id === id);
+  if (!result) {
+    return null;
+  }
   return result;
 }
 
 const firstNote = getNote(1);
-console.log(firstNote);
+console.log("First note", firstNote);
 
 const secondNote = getNote(2);
-console.log(secondNote);
+console.log("Second note", secondNote);
 
 // My idea: delete a note by id
 function deleteNote(id) {
   for (let i = 0; i < notes.length; i++) {
     if (notes[i].id == id) {
       notes.splice(i, 1);
-      break;
+      break; // Found note[i], so we can break; no need to check the remaining items.
     }
   }
 }
 
 saveNote("Make dinner", 3);
 saveNote("Water plants", 4);
+
+const thirdNote = getNote();
+console.log("Third note", thirdNote);
+
+const note = getNote(5);
+if (!note) {
+  console.log('Note missing');
+}
 
 console.log("After add");
 logOutNotesFormatted();
