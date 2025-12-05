@@ -124,9 +124,11 @@ function getMilliseconds(tokens) {
   const unit = tokens[1];
   let milliseconds;
   switch (unit) {
+    case "minute":
     case "minutes":
       milliseconds = value * 60 * 1000;
       break;
+    case "second":  
     case "seconds":
       milliseconds = value * 1000;
       break;
