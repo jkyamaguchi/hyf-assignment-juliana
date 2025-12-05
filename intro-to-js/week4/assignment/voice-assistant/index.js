@@ -128,7 +128,7 @@ function getMilliseconds(tokens) {
     case "minutes":
       milliseconds = value * 60 * 1000;
       break;
-    case "second":
+    case "second":  
     case "seconds":
       milliseconds = value * 1000;
       break;

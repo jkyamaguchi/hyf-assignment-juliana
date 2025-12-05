@@ -54,6 +54,8 @@ const positions = [
     [" ", " ", "o"],
     [" ", "o", " "],
   ],
+
+
 ];
 
 const positionA = [
@@ -74,6 +76,7 @@ function getRenderedGame(position) {
   return output;
 }
 
+// Reports the final state of the game. 
 function getGameInfo(position) {
   const output = {
     winner: undefined,
@@ -120,9 +123,8 @@ function getGameInfo(position) {
   if (completed || hasWinner){
     output.hasEnded = true;
   } 
-
   console.log(output);
-
+  return output;
 }
 
 function checkWinnerRow(position) {
@@ -223,7 +225,7 @@ function getOpponent(symbol){
 for (let position of positions) {
   const renderedGame = getRenderedGame(position);
   console.log(renderedGame);
-  getGameInfo(position);
+  console.log(getGameInfo(position));
 }
 
 // const renderedGame = getRenderedGame(positionA);
