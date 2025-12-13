@@ -37,19 +37,19 @@ WHERE t.title like '%database%' OR t.description like '%database%';
 SELECT t.title, s.name 
 FROM task t 
 JOIN status s 
-WHERE t.status_id = s.id ; 
+ON t.status_id = s.id ; 
 
 -- 9.  Get the name of each status, along with a count of how many tasks have that status.
 SELECT s.name, COUNT(*) AS number_tasks
 FROM status s
 JOIN task t 
-WHERE s.id = t.status_id 
+ON s.id = t.status_id
 GROUP BY s.id ; 
 
 -- 10. Get the names of all statuses, sorted by the status with most tasks first.
 SELECT s.name, COUNT(*) AS number_tasks
 FROM status s
 JOIN task t 
-WHERE s.id = t.status_id 
-GROUP BY s.id 
+ON s.id = t.status_id 
+GROUP BY s.name 
 ORDER BY number_tasks DESC ; 
