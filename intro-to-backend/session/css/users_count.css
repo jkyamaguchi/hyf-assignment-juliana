@@ -1,0 +1,102 @@
+:root {
+  --bg: #f5f6fa;
+  --card: #ffffff;
+  --border: #e5e7eb;
+  --text: #1f2937;
+  --muted: #6b7280;
+  --accent: #2563eb;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 32px 16px;
+  background: var(--bg);
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  color: var(--text);
+}
+
+.card {
+  width: min(560px, 100%);
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 28px;
+  box-shadow: 0 10px 30px rgba(31, 41, 55, 0.08);
+}
+
+h1 {
+  margin: 0 0 6px;
+  font-size: 26px;
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  margin: 22px 0 10px;
+  font-size: 16px;
+  color: var(--muted);
+  letter-spacing: 0.01em;
+}
+
+p {
+  margin: 0 0 8px;
+  color: var(--muted);
+}
+
+.count-line {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 12px;
+}
+
+.count {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: 8px;
+  background: rgba(37, 99, 235, 0.08);
+  color: var(--accent);
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.users-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  background: #f9fafb;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.users-table th,
+.users-table td {
+  padding: 12px 14px;
+  text-align: left;
+  font-size: 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.users-table thead th {
+  background: #eef2f7;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.users-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.users-table td:last-child {
+  color: var(--muted);
+  font-weight: 500;
+}
