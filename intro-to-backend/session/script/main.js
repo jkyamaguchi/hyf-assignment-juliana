@@ -26,7 +26,7 @@ const app = express();
 app.use(bodyParser.json());
 
 app.listen(3000, function () {
-  console.log("server is ready");
+  console.log("Server is ready and running on http://localhost:3000/");
 });
 
 //http://localhost:3000/
@@ -69,8 +69,9 @@ app.post(ROUTES.CREATE, (request, response) => {
 
 //http://localhost:3000/users -> Parameterize SQL
 app.get(ROUTES.USERS, async (req, res) => {
-  try {
+    try {
     const users = await knex("user").select("*");
+    if (!users || !users.length) return res.status(404).json({ error: "No users found"});
     res.json({ users });
   } catch (err) {
     console.error("Failed to fetch users", err);
