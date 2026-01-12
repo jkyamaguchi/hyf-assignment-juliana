@@ -3,29 +3,30 @@ console.log("Script loaded");
 const products = getAvailableProducts();
 console.log(products);
 
-// Get the container where the table will be added
+// Get the container where the list will be added
 const container = document.getElementById("list-container");
 
-// Create a table element
-const table = document.createElement("table");
+const list = document.createElement("ul");
 
-// Create table header
-const thead = document.createElement("thead");
-const headerRow = document.createElement("tr");
+// Create a simple header row for the list
+const header = document.createElement("div");
+header.className = "list-header";
 
-const headers = ["Product Name", "Price", "Rating"];
-headers.forEach((headerText) => {
-  const th = document.createElement("th");
-  th.textContent = headerText;
-  headerRow.appendChild(th);
-});
+const headerTitle = document.createElement("span");
+headerTitle.className = "product-title";
+headerTitle.textContent = "Title";
 
-thead.appendChild(headerRow);
-table.appendChild(thead);
+const headerPrice = document.createElement("span");
+headerPrice.className = "product-price";
+headerPrice.textContent = "Price";
 
-// Create table body
-const tbody = document.createElement("tbody");
-table.appendChild(tbody);
+const headerRating = document.createElement("span");
+headerRating.className = "product-rating";
+headerRating.textContent = "Rating";
+
+header.appendChild(headerTitle);
+header.appendChild(headerPrice);
+header.appendChild(headerRating);
 
 function getProduct(object) {
   const product = {
@@ -36,33 +37,37 @@ function getProduct(object) {
   return product;
 }
 
-// This should create the table with rows for individual products
+// Render products as a simple list
 function renderProducts(products) {
+  container.appendChild(header);
+
   products.forEach((product) => {
-    const tr = document.createElement("tr"); // Create a new table row
+    const li = document.createElement("li");
     const item = getProduct(product);
 
-    // Create table cells for each property
-    const tdName = document.createElement("td");
-    tdName.textContent = item.productName;
+    // Title
+    const title = document.createElement("span");
+    title.className = "product-title";
+    title.textContent = item.productName;
 
-    const tdPrice = document.createElement("td");
-    tdPrice.textContent = `$${item.price}`;
+    // Price
+    const price = document.createElement("span");
+    price.className = "product-price";
+    price.textContent = `$${item.price}`;
 
-    const tdRating = document.createElement("td");
-    // Convert rating number to stars
-    const stars = "★".repeat(Math.round(item.rating));
-    tdRating.textContent = stars;
+    // Rating
+    const rating = document.createElement("span");
+    rating.className = "product-rating";
+    rating.textContent = "★".repeat(Math.round(item.rating));
 
-    // Append cells to row
-    tr.appendChild(tdName);
-    tr.appendChild(tdPrice);
-    tr.appendChild(tdRating);
+    li.appendChild(title);
+    li.appendChild(price);
+    li.appendChild(rating);
 
-    tbody.appendChild(tr); // Append the row to the table body
+    list.appendChild(li);
   });
-  // Append the table to the container
-  container.appendChild(table);
+
+  container.appendChild(list);
 }
 
 renderProducts(products);
