@@ -1,0 +1,143 @@
+:root {
+  --container-width: 900px;
+  --page-padding: 1rem;
+  --gap: 1.2rem;
+  --accent: #47007a;
+  --text: #414141;
+  --muted: #c9c9c9;
+  --gutter: 1rem;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1;
+  display: flex; /* Make the body a flex container, so we can use flex properties on the children elements */
+  flex-direction: column; /* Make the content flow vertically */
+  height: 100vh; /* Make the body the full height of the viewport (can be 100dvh for dynamic heights on mobile viewports) */
+}
+
+.header {
+  background: linear-gradient(var(--accent));
+  padding-left: 11.5rem;
+  padding-right: 11.5rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.header__title,
+.header__subtitle {
+  margin: 0;
+  padding: 0.25rem 0 0.8rem 1.25rem; /*top, right, bottom, left*/
+}
+
+.header__title {
+  font-size: clamp(1.6rem, 2.6vw, 2rem);
+  color: #fff;
+}
+
+.header__subtitle {
+  font-size: clamp(1rem, 2vw, 1.3rem);
+  color: var(--muted);
+}
+
+.header__nav {
+  background: var(--accent);
+  /*margin-bottom: calc(-1rem);  cancel out header's bottom padding */
+  padding: 0.2rem 1rem; /* keep some vertical breathing space */
+  gap: var(--gap);
+}
+
+.header__list {
+  list-style: none; /* Remove default list styling */
+  display: flex;
+  gap: var(--gap);
+  align-items: center;
+}
+
+.header__button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header__button:hover .header__img,
+.header__button:focus .header__img {
+  filter: brightness(0) saturate(100%) invert(85%) sepia(18%) saturate(1345%)
+    hue-rotate(225deg) brightness(102%) contrast(96%); /* Changes to light purple/pink on hover */
+}
+
+.header__img {
+  max-width: 30px;
+  max-height: 30px;
+  width: 100%;
+  height: 100%;
+  object-fit: fit;
+  display: block;
+  filter: brightness(0) saturate(100%) invert(100%); /* Makes image white */
+}
+
+/* Layout: make the about page use the same centered container*/
+.section {
+  max-width: var(--container-width);
+  margin: 1rem auto; /* center horizontally and add a small vertical gap */
+  padding: var(--page-padding);
+  background: #fff; /* ensure readable surface if not already applied */
+}
+
+.section__title {
+  margin: 0 0 0.5rem 0;
+  color: var(--accent);
+}
+
+.section__text,
+.section__ul {
+  margin-bottom: 1rem;
+  color: var(--text);
+}
+
+.section__ul li {
+  margin-left: 1rem;
+  text-indent: -1rem;
+  padding-left: 1rem;
+}
+
+@media (max-width: 560px) {
+  .header {
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .header__title,
+  .header__subtitle {
+    padding: 0.25rem 0 0.5rem 0;
+  }
+
+  .nav-list {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .header__nav {
+    padding: 0.5rem;
+    margin-left: calc(-1rem);
+    margin-right: calc(-1rem);
+    width: 100%;
+  }
+}

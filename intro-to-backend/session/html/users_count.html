@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Users Count</title>
+    <link rel="stylesheet" href="../css/users_count.css" />
+  </head>
+  <body>
+    <div class="card">
+      <h2>Users Count</h2>
+      <p class="count-line">
+        Total users in database: <span class="count">{{COUNT}}</span>
+      </p>
+      <h2>Users</h2>
+      <table class="users-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{USERS_ROWS}}
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>

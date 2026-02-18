@@ -1,0 +1,37 @@
+Exercise 6
+Step 14 
+In the branch main, there is only the countries.txt that contains only the first two countries.
+
+Step 15
+PS C:\Users\Juliana\Desktop\branch-exercise> git log --oneline
+f92912a (HEAD -> master) Initial commit for countries.txt
+
+Step 16
+In the branch add-countries there is the countries.txt file that contains four countries name.
+
+Step 17 
+32e52bc (HEAD -> add-countries) Add two more countries in the branch add-countries
+f92912a (master) Initial commit for countries.txt
+
+Step 18
+In the branch add-cities there are the files citites.txt and countries.txt. In the first, there are the names of two cities, in the second, there are the names of two countries.
+
+Step 19 
+4adea29 (HEAD -> add-cities) Initial commit for cities.txt
+f92912a (master) Initial commit for countries.txt
+
+Step 22
+After the merge, there is only the countries.txt that contais the name of four countries.
+
+Step 23
+32e52bc (HEAD -> master, add-countries) Add two more countries in the branch add-countries
+f92912a Initial commit for countries.txt
+
+Step 25
+After the merge, there are two files, cities.txt and countries.txt. In the first, there are the names of two cities, and in the second, the name of the four countries.
+
+Step 26
+940c086 (HEAD -> master) Merge branch 'add-cities'
+4adea29 (add-cities) Initial commit for cities.txt
+32e52bc (add-countries) Add two more countries in the branch add-countries
+f92912a Initial commit for countries.txt
