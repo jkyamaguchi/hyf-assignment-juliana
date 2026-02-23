@@ -1,5 +1,7 @@
 potato
 tomato
-lettuce
+broccoli
 carrot
 onion
+spinach
+asparagus
