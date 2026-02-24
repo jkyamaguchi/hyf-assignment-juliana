@@ -1,5 +1,6 @@
 asparagus
 broccoli
+onion
 carrot
 eggplant
 lettuce
