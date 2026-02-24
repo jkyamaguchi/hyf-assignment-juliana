@@ -1,5 +1,7 @@
 asparagus
 broccoli
-cucumber
+carrot
 eggplant
 lettuce
+potato
+zucchini
