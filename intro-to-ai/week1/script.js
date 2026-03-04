@@ -22,7 +22,7 @@ function changeBackgroundColor() {
 // Add event listener to the palette button
 document.addEventListener("DOMContentLoaded", function () {
   const paletteButton = document.querySelector(
-    'button[aria-label="Change color"]'
+    'button[aria-label="Change color scheme"]',
   );
   if (paletteButton) {
     paletteButton.addEventListener("click", changeBackgroundColor);
