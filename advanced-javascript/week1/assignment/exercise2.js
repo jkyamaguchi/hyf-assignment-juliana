@@ -1,12 +1,25 @@
 import { teas } from "../../data/teas.js";
 
 function inventoryReport(teas) {
+  let inStock = 0;
+  let outOfStock = 0;
+  let totalInventoryValue = 0;
+  let totalPrice = 0;
+  teas.forEach((tea) => {
+    if (tea.inStock) {
+      inStock++;
+    } else {
+      outOfStock++;
+    }
+    totalInventoryValue += tea.pricePerGram * tea.stockCount;
+    totalPrice += tea.pricePerGram;
+  });
   return {
     totalTeas: teas.length,
-    inStock: teas.filter((tea) => tea.inStock).length,
-    outOfStock: teas.filter((tea) => !tea.inStock).length,
-    totalInventoryValue: teas.map((tea) => tea.pricePerGram * tea.stockCount).reduce((totalInventoryValue, price) => totalInventoryValue + price, 0),
-    averagePrice: teas.map((tea) => tea.pricePerGram).reduce((sum, price) => sum + price, 0) / teas.length
+    inStock: inStock,
+    outOfStock: outOfStock,
+    totalInventoryValue: totalInventoryValue,
+    averagePrice: teas.length ? totalPrice / teas.length : 0,
   };
 }
 
