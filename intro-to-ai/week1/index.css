@@ -16,7 +16,7 @@
 
 body {
   font-family: Arial, sans-serif;
-  line-height: 1;
+  line-height: 1.5;
   display: flex; /* Make the body a flex container, so we can use flex properties on the children elements */
   flex-direction: column; /* Make the content flow vertically */
   height: 100vh; /* Make the body the full height of the viewport (can be 100dvh for dynamic heights on mobile viewports) */
@@ -85,7 +85,12 @@ body {
   max-height: 30px;
   width: 100%;
   height: 100%;
-  object-fit: fit;
+  object-fit: contain;
+  /* Add visible focus style for accessibility */
+  .header__button:focus {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
   display: block;
   filter: brightness(0) saturate(100%) invert(100%); /* Makes image white */
 }
@@ -111,8 +116,7 @@ body {
 
 .section__ul li {
   margin-left: 1rem;
-  text-indent: -1rem;
-  padding-left: 1rem;
+  padding-left: 0;
 }
 
 @media (max-width: 560px) {
@@ -127,11 +131,6 @@ body {
   .header__title,
   .header__subtitle {
     padding: 0.25rem 0 0.5rem 0;
-  }
-
-  .nav-list {
-    flex-direction: column;
-    gap: 0.5rem;
   }
 
   .header__nav {
