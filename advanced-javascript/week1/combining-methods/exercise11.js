@@ -5,9 +5,7 @@ import { teas } from "../../data/teas.js";
 
 const greenTeas = teas
   .filter(function (tea) {
-    if (tea.type === "green") {
-      return tea;
-    }
+    return tea.type === "green";
   })
   .map(function (tea) {
     return tea.name;
