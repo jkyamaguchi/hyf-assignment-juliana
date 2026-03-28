@@ -1,8 +1,7 @@
 import { login } from "./exercise16.js";
 
 const API_BASE = "https://tea-api-787553294298.europe-west1.run.app/api";
-const EMAIL = "6cc2i7n7br@sharebot.net";
-const PASSWORD = "@S)8+64QzQK+l5";
+// Credentials are now passed as parameters, not hardcoded
 const DEFAULT_ORDER_ITEMS = [{ teaId: 9, grams: 25 }]; // teaId with stockCount > 0
 
 // Use the token from Exercise 16 to fetch orders
@@ -74,8 +73,8 @@ function printOrders(orders) {
   orders.forEach((order) => console.log(formatOrderInline(order)));
 }
 
-async function run() {
-  const token = await login(EMAIL, PASSWORD);
+async function run(email, password) {
+  const token = await login(email, password);
   const createdOrder = await createOrder(token);
   console.log("Created order:", createdOrder);
 
@@ -83,9 +82,15 @@ async function run() {
   printOrders(orders);
 }
 
+// Accept credentials from command line arguments
 async function main() {
+  const [, , email, password] = process.argv;
+  if (!email || !password) {
+    console.error("Usage: node exercise17.js <email> <password>");
+    process.exit(1);
+  }
   try {
-    await run();
+    await run(email, password);
   } catch (err) {
     console.error(err.message);
   }
