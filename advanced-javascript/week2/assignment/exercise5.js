@@ -19,14 +19,17 @@ const tasks = [
 ];
 
 function runSequentially(tasks, finalCallback) {
-  function next(index) {
-    if (index === tasks.length) {
-      finalCallback();
-      return;
-    }
-    tasks[index](() => next(index + 1));
-  }
-  next(0);
+  // function next(index) {
+  //   if (index === tasks.length) {
+  //     finalCallback();
+  //     return;
+  //   }
+  //   tasks[index](() => next(index + 1));
+  // }
+  // next(0);
+
+  const final = tasks.reverse().reduce((carry, f) => () => f(carry), finalCallback)
+  final()
 }
 
 runSequentially(tasks, () => {
