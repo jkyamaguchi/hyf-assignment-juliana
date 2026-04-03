@@ -1,39 +1,47 @@
 class Inventory {
-  constructor(tea, stockCount) {
-    this.tea = tea;
-    this.stockCount = stockCount;
+  constructor() {
+    // Store a Map or object of tea ID -> { tea, stockCount }
+    this.items = {};
   }
 
   add(tea, stockCount) {
     // Add a tea to inventory
-    this.tea = tea;
-    this.stockCount = stockCount;
+    this.items[tea.name] = { tea, stockCount };
   }
 
-  sell(grams) {
+  sell(teaName, grams) {
     // Throw an error if not enough stock
-    if (grams > this.stockCount)
+    const item = this.items[teaName];
+    if (!item) {
+      throw new Error(`Tea not found: ${teaName}`);
+    }
+
+    if (grams > item.stockCount)
       throw new Error(
-        `Not enough stock for ${this.tea.name} (have ${this.stockCount}, need ${grams})`,
+        `Not enough stock for ${item.tea.name} (have ${item.stockCount}, need ${grams})`,
       );
     // Subtract grams from stockCount
-    this.stockCount -= grams;
+    item.stockCount -= grams;
   }
 
-  restock(grams) {
+  restock(teaName, grams) {
     // Add grams to stockCount
-    this.stockCount += grams;
+    const item = this.items[teaName];
+    if (!item) {
+      throw new Error(`Tea not found: ${teaName}`);
+    }
+    item.stockCount += grams;
   }
 
   getStock(teaName) {
     // Return current stock count for a tea
-    return teaName.stockCount;
+    return this.items[teaName]?.stockCount;
   }
 
   getLowStock(threshold) {
     // Return array of { tea, stockCount } where stock < threshold
     // Use .filter()
-    return [{ tea: this.tea, stockCount: this.stockCount }].filter(
+    return Object.values(this.items).filter(
       (item) => item.stockCount < threshold,
     );
   }
@@ -41,7 +49,7 @@ class Inventory {
   getTotalValue() {
     // Sum of (pricePerGram * stockCount) for all items
     // Use .reduce()
-    return [{ tea: this.tea, stockCount: this.stockCount }].reduce(
+    return Object.values(this.items).reduce(
       (sum, item) => sum + item.tea.pricePerGram * item.stockCount,
       0,
     );
