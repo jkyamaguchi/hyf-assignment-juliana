@@ -1,16 +1,7 @@
-// ex. 1
-// Create a Tea class with a constructor that accepts
-// name, type, and origin. Create two instances and log them.
-
-// ex. 4
-// Add validation to your constructor. Throw an error if:
-//   name is empty or missing
-//   pricePerGram is negative
-//   type is not one of: "green", "black", "herbal",
+const VALID_TEA_TYPES = ["green", "black", "herbal", "oolong", "white"];
 
 function validateTeaType(type) {
-  const validTypes = ["green", "black", "herbal", "oolong", "white"];
-  if (validTypes.includes(type)) {
+  if (VALID_TEA_TYPES.includes(type)) {
     return type;
   } else {
     throw new Error(`Invalid type: ${type}.`);
@@ -20,10 +11,12 @@ function validateTeaType(type) {
 class Tea {
   constructor(name, type, origin, pricePerGram, organic) {
     if (!name) throw new Error("Name is required");
-    this.name = name;
-    this.type = validateTeaType(type);
-    this.origin = origin;
+    const validatedType = validateTeaType(type);
     if (pricePerGram <= 0) throw new Error("Price must be positive");
+
+    this.name = name;
+    this.type = validatedType;
+    this.origin = origin;
     this.pricePerGram = pricePerGram;
     this.organic = organic;
   }
@@ -33,7 +26,8 @@ class Tea {
   }
 
   describe() {
-    return `${this.name} (${this.type}) from ${this.origin} - ${(this.pricePerGram * 100).toFixed(2)} DKK/100g`;
+    const organicLabel = this.organic ? " [organic]" : "";
+    return `${this.name} (${this.type}) from ${this.origin}${organicLabel} - ${(this.pricePerGram * 100).toFixed(2)} DKK/100g`;
   }
 
   static fromObject(obj) {
@@ -67,4 +61,4 @@ class Tea {
   }
 }
 
-export { Tea };
+export { Tea, VALID_TEA_TYPES };
