@@ -7,8 +7,9 @@ class Order {
   addItem(orderItem) {
     // Only allow adding items when status is "pending"
     // Throw error otherwise
-    if (this.status !== "pending")
+    if (this.status !== "pending") {
       throw new Error("Cannot add items to a confirmed order");
+    }
     this.items.push(orderItem);
   }
 
