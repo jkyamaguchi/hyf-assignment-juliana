@@ -13,7 +13,6 @@ class OrderItem {
   }
 
   lineTotal() {
-    // use the tea's priceFor method
     return this.tea.priceFor(this.grams);
   }
 
