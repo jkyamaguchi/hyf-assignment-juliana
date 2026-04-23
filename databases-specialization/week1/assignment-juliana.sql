@@ -34,24 +34,47 @@ CREATE TABLE user_task (
 INSERT INTO user (name, email, phone) VALUES ('Juliana Yamaguchi', 'jkyamaguchi@gmail.com', '123-456-7890');
 
 -- 2. Insert a new task assigned to yourself.
-INSERT INTO task (title, description, created, updated, due_date, status_id) VALUES ('Learn SQL', 'Practice database queries', 'datetime('now'), datetime('now'), datetime('now', '+7 days'), 2);
-INSERT INTO user_task (user_id, task_id) VALUES(12, 36);
+INSERT INTO task (title, description, created, updated, due_date, status_id)
+VALUES ('Learn SQL', 'Practice database queries', datetime('now'), datetime('now'), datetime('now', '+7 days'), 2);
+
+INSERT INTO user_task (user_id, task_id)
+SELECT u.id, last_insert_rowid()
+FROM user u
+WHERE u.email = 'jkyamaguchi@gmail.com';
 
 -- 3. Update the title of the task you just created to "Master SQL Basics"
 UPDATE task
 SET title = 'Master SQL Basics',
-updated = DATETIME('now')
-WHERE id = 36;
+    updated = DATETIME('now')
+WHERE id = (
+    SELECT t.id FROM task t
+    JOIN user_task ut ON t.id = ut.task_id
+    JOIN user u ON ut.user_id = u.id
+    WHERE u.email = 'jkyamaguchi@gmail.com'
+      AND t.title = 'Learn SQL'
+);
 
 -- 4. Change the due date of your task to two weeks from today
 UPDATE task
 SET due_date = DATE('now', '+14 days')
-WHERE id = 36;
+WHERE id = (
+    SELECT t.id FROM task t
+    JOIN user_task ut ON t.id = ut.task_id
+    JOIN user u ON ut.user_id = u.id
+    WHERE u.email = 'jkyamaguchi@gmail.com'
+      AND t.title = 'Master SQL Basics'
+);
 
 -- 5. Change the status of your task to "Done"
 UPDATE task
 SET status_id = (SELECT id FROM status WHERE name = 'Done')
-WHERE id = 36;
+WHERE id = (
+    SELECT t.id FROM task t
+    JOIN user_task ut ON t.id = ut.task_id
+    JOIN user u ON ut.user_id = u.id
+    WHERE u.email = 'jkyamaguchi@gmail.com'
+      AND t.title = 'Master SQL Basics'
+);
 
 -- 6. Delete one of the tasks in the database (choose any task)
 DELETE FROM user_task
@@ -119,9 +142,17 @@ INSERT INTO category (name, color) VALUES
 ('Study', 'green');
 
 -- 6. Assign categories to at least 5 different tasks
+INSERT INTO task_category (task_id, category_id)
+SELECT t.id, c.id
+FROM task t, category c
+JOIN user_task ut ON t.id = ut.task_id
+JOIN user u ON ut.user_id = u.id
+WHERE u.email = 'jkyamaguchi@gmail.com'
+  AND t.title = 'Master SQL Basics'
+  AND c.name = 'Study';  -- Master SQL Basics → Study
+
 INSERT INTO task_category (task_id, category_id) VALUES
-(36, 3),  -- Master SQL Basics → Study
-(12, 1),  -- Some task → Work
+(12, 1),  -- Some task → Work (intentional hardcoded existing tasks)
 (18, 2),  -- Some task → Personal
 (22, 1),  -- Some task → Work
 (25, 3);  -- Some task → Study
