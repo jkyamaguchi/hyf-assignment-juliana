@@ -1,14 +1,46 @@
+CREATE TABLE user (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	name VARCHAR(255) NOT NULL,
+	email VARCHAR(255) NOT NULL,
+	phone VARCHAR(255)
+);
+
+CREATE TABLE status (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	name VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE task (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	title VARCHAR(255) NOT NULL,
+	description VARCHAR(255),
+    created DATETIME NOT NULL,
+    updated DATETIME,
+    due_date DATETIME,
+    status_id INTEGER NOT NULL DEFAULT 1,
+	FOREIGN KEY (status_id) REFERENCES status(id)
+);
+
+CREATE TABLE user_task (
+    user_id INTEGER NOT NULL,
+    task_id INTEGER NOT NULL,
+    PRIMARY KEY (user_id, task_id),
+    FOREIGN KEY (user_id) REFERENCES USER(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (task_id) REFERENCES task(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
 -- PART 1
 -- 1. Insert a new user with your own name and email
 INSERT INTO user (name, email, phone) VALUES ('Juliana Yamaguchi', 'jkyamaguchi@gmail.com', '123-456-7890');
 
 -- 2. Insert a new task assigned to yourself.
-INSERT INTO task (title, description, created, updated, due_date, status_id) VALUES ('Learn SQL', 'Practice database queries', '2026-04-14 23:00:59', '2026-04-15 23:30:59', '2026-04-21 23:00:59', 2);
+INSERT INTO task (title, description, created, updated, due_date, status_id) VALUES ('Learn SQL', 'Practice database queries', 'datetime('now'), datetime('now'), datetime('now', '+7 days'), 2);
 INSERT INTO user_task (user_id, task_id) VALUES(12, 36);
 
 -- 3. Update the title of the task you just created to "Master SQL Basics"
 UPDATE task
-SET title = 'Master SQL Basics'
+SET title = 'Master SQL Basics',
+updated = DATETIME('now')
 WHERE id = 36;
 
 -- 4. Change the due date of your task to two weeks from today
@@ -18,10 +50,13 @@ WHERE id = 36;
 
 -- 5. Change the status of your task to "Done"
 UPDATE task
-SET status_id = 3
+SET status_id = (SELECT id FROM status WHERE name = 'Done')
 WHERE id = 36;
 
 -- 6. Delete one of the tasks in the database (choose any task)
+DELETE FROM user_task
+WHERE task_id = 35;
+
 DELETE FROM task
 WHERE id = 35;
 
@@ -39,9 +74,11 @@ JOIN status s ON t.status_id = s.id
 WHERE s.name = 'Done';
 
 -- 3. Find all overdue tasks (due_date is earlier than today)
-SELECT *
-FROM task
-WHERE due_date < DATE('now');
+SELECT t.*
+FROM task t
+JOIN status s ON t.status_id = s.id
+WHERE t.due_date < DATE('now')
+  AND s.name != 'Done';
 
 -- PART 3
 -- 1. Add a new column called priority to the task table.
