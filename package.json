@@ -1,0 +1,22 @@
+{
+  "name": "hyf-assignment-juliana",
+  "version": "1.0.0",
+  "description": "> [!TIP]\r > Need any help with git? Feel free to reach out on [#git-support](https://hackyourfuture-cph.slack.com/archives/CU1K85X3R)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jkyamaguchi/hyf-assignment-juliana.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/jkyamaguchi/hyf-assignment-juliana/issues"
+  },
+  "homepage": "https://github.com/jkyamaguchi/hyf-assignment-juliana#readme",
+  "dependencies": {}
+}
