@@ -1,6 +1,12 @@
 import express from "express";
 import db from "../../../data/database.js";
 
+
+import z from "zod";
+const tagsCreateSchema=z.object({
+  name:z.string().min(2)
+ })
+ 
 const router = express.Router();
 
 // GET /api/tags
