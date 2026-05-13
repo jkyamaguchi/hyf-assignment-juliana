@@ -1,9 +1,9 @@
 import express from "express";
 import db from "../../../data/database.js";
+import authenticateJwt from "../middleware/authenticateJwt.js";
 import z from "zod";
 
 const snippetCreateSchema = z.object({
-  user_id: z.string().trim().min(1, "user_id is required"),
   title: z.string().trim().min(1, "title is required"),
   contents: z.string().trim().min(1, "contents is required"),
   is_private: z.boolean().optional(),
@@ -225,7 +225,7 @@ router.get("/:id", async (req, res) => {
 });
 
 // POST /api/snippets
-router.post("/", async (req, res) => {
+router.post("/", authenticateJwt, async (req, res) => {
   try {
     const { error, data, success } = snippetCreateSchema.safeParse(req.body);
     if (!success) {
@@ -236,7 +236,8 @@ router.post("/", async (req, res) => {
       );
     }
 
-    const { user_id, title, contents, is_private } = data;
+    const { title, contents, is_private } = data;
+    const user_id = String(req.user.id);
 
     const [id] = await db("snippets").insert({
       user_id,
@@ -259,7 +260,7 @@ router.post("/", async (req, res) => {
 });
 
 // PUT /api/snippets/:id -> test in POSTMAN (PUT)
-router.put("/:id", async (req, res) => {
+router.put("/:id", authenticateJwt, async (req, res) => {
   try {
     const id = getIdFromParams(req, res);
     if (id === null) {
@@ -280,6 +281,12 @@ router.put("/:id", async (req, res) => {
       return res.status(404).json({ error: "Snippet not found" });
     }
 
+    if (String(existing.user_id) !== String(req.user.id)) {
+      return res.status(403).json({
+        error: "Forbidden: you can only modify your own snippets",
+      });
+    }
+
     await db("snippets").where({ id }).update(data);
     const updated = await db("snippets").where({ id }).first();
 
@@ -296,11 +303,22 @@ router.put("/:id", async (req, res) => {
 });
 
 // DELETE /api/snippets/:id -> test in POSTMAN (DELETE)
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", authenticateJwt, async (req, res) => {
   try {
     const id = getIdFromParams(req, res);
     if (id === null) {
       return;
+    }
+
+    const existing = await db("snippets").where({ id }).first();
+    if (!existing) {
+      return res.status(404).json({ error: "Snippet not found" });
+    }
+
+    if (String(existing.user_id) !== String(req.user.id)) {
+      return res.status(403).json({
+        error: "Forbidden: you can only delete your own snippets",
+      });
     }
 
     const deleted = await db("snippets").where({ id }).del();
