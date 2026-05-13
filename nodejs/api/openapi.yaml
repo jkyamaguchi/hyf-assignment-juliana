@@ -2,10 +2,108 @@ openapi: 3.0.3
 info:
   title: Snippets API
   version: 1.0.0
+  description: API for authentication and snippet management.
+
+servers:
+  - url: http://localhost:3000
+
+tags:
+  - name: Auth
+  - name: Snippets
 
 paths:
+  /api/auth/register:
+    post:
+      tags:
+        - Auth
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterRequest"
+      responses:
+        "201":
+          description: User created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthSuccessResponse"
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "409":
+          description: User already exists
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          $ref: "#/components/responses/ServerError"
+
+  /api/auth/login:
+    post:
+      tags:
+        - Auth
+      summary: Login with email and password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+      responses:
+        "200":
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthSuccessResponse"
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "401":
+          description: Wrong email or password
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          $ref: "#/components/responses/ServerError"
+
+  /api/auth/login-token:
+    post:
+      tags:
+        - Auth
+      summary: Login and receive an opaque token
+      description: Returns an opaque token stored in the database. This token is not accepted by the JWT-protected snippet write endpoints.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+      responses:
+        "200":
+          description: Opaque token created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OpaqueTokenResponse"
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "401":
+          description: Wrong email or password
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          $ref: "#/components/responses/ServerError"
+
   /api/snippets:
     get:
+      tags:
+        - Snippets
       summary: List public code snippets
       responses:
         "200":
@@ -17,13 +115,20 @@ paths:
                 items:
                   $ref: "#/components/schemas/Snippet"
         "500":
-          description: Server error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
+          $ref: "#/components/responses/ServerError"
     post:
+      tags:
+        - Snippets
       summary: Create a snippet
+      description: Requires a JWT bearer token.
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SnippetCreateRequest"
       responses:
         "201":
           description: Snippet created
@@ -32,20 +137,16 @@ paths:
               schema:
                 $ref: "#/components/schemas/Snippet"
         "400":
-          description: Invalid request body
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
+          $ref: "#/components/responses/ValidationError"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
         "500":
-          description: Server error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
+          $ref: "#/components/responses/ServerError"
 
   /api/snippets/public-feed:
     get:
+      tags:
+        - Snippets
       summary: List non-private snippets
       responses:
         "200":
@@ -63,21 +164,15 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
         "500":
-          description: Server error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
+          $ref: "#/components/responses/ServerError"
 
   /api/snippets/{id}:
     get:
+      tags:
+        - Snippets
       summary: Get snippet by ID
       parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
+        - $ref: "#/components/parameters/SnippetId"
       responses:
         "200":
           description: Snippet found
@@ -98,19 +193,22 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
         "500":
-          description: Server error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
+          $ref: "#/components/responses/ServerError"
     put:
+      tags:
+        - Snippets
       summary: Update snippet by ID
+      description: Requires a JWT bearer token. Only the snippet owner can update it.
+      security:
+        - BearerAuth: []
       parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
+        - $ref: "#/components/parameters/SnippetId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SnippetUpdateRequest"
       responses:
         "200":
           description: Snippet updated
@@ -119,7 +217,11 @@ paths:
               schema:
                 $ref: "#/components/schemas/Snippet"
         "400":
-          description: Invalid id or request body
+          $ref: "#/components/responses/ValidationError"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "403":
+          description: Forbidden
           content:
             application/json:
               schema:
@@ -131,31 +233,33 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
         "500":
-          description: Server error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
+          $ref: "#/components/responses/ServerError"
     delete:
+      tags:
+        - Snippets
       summary: Delete snippet by ID
+      description: Requires a JWT bearer token. Only the snippet owner can delete it.
+      security:
+        - BearerAuth: []
       parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
+        - $ref: "#/components/parameters/SnippetId"
       responses:
         "200":
           description: Snippet deleted
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
+                $ref: "#/components/schemas/DeleteMessage"
         "400":
           description: Invalid id parameter
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "403":
+          description: Forbidden
           content:
             application/json:
               schema:
@@ -167,22 +271,164 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
         "500":
-          description: Server error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
+          $ref: "#/components/responses/ServerError"
 
 components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Use the Authorize button and paste the JWT token as Bearer <token>.
+
+  parameters:
+    SnippetId:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: integer
+
+  responses:
+    ValidationError:
+      description: Invalid request body
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ValidationError"
+    UnauthorizedError:
+      description: Missing, invalid, or expired JWT token
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    ServerError:
+      description: Server error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+
   schemas:
+    RegisterRequest:
+      type: object
+      required:
+        - first_name
+        - last_name
+        - email
+        - password
+      properties:
+        first_name:
+          type: string
+        last_name:
+          type: string
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+
+    LoginRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+
+    SnippetCreateRequest:
+      type: object
+      required:
+        - title
+        - contents
+      properties:
+        title:
+          type: string
+        contents:
+          type: string
+        is_private:
+          type: boolean
+
+    SnippetUpdateRequest:
+      type: object
+      minProperties: 1
+      properties:
+        title:
+          type: string
+        contents:
+          type: string
+        is_private:
+          type: boolean
+
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        email:
+          type: string
+          format: email
+        first_name:
+          type: string
+        last_name:
+          type: string
+
+    AuthSuccessResponse:
+      type: object
+      properties:
+        msg:
+          type: string
+        token:
+          type: string
+        user:
+          $ref: "#/components/schemas/User"
+
+    OpaqueTokenResponse:
+      type: object
+      properties:
+        token:
+          type: string
+
     Snippet:
       type: object
       properties:
         id:
           type: integer
+        user_id:
+          type: string
         title:
           type: string
         contents:
+          type: string
+        is_private:
+          type: boolean
+
+    DeleteMessage:
+      type: object
+      properties:
+        message:
+          type: string
+
+    ValidationError:
+      type: object
+      properties:
+        error:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: "#/components/schemas/ValidationIssue"
+
+    ValidationIssue:
+      type: object
+      properties:
+        path:
+          type: string
+        message:
           type: string
 
     Error:

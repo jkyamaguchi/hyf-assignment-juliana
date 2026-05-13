@@ -1,9 +1,11 @@
 import express from "express";
+import "dotenv/config";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import swaggerUi from "swagger-ui-express";
 import YAML from "yaml";
+import authRouter from "./api/src/routers/auth.js";
 import snippetsRouter from "./api/src/routers/snippets.js";
 import tagsRouter from "./api/src/routers/tags.js";
 
@@ -17,6 +19,7 @@ const openapiDocument = YAML.parse(fs.readFileSync(openapiPath, "utf8"));
 // Support parsing JSON requests
 app.use(express.json());
 
+app.use("/api/auth", authRouter);
 app.use("/api/snippets", snippetsRouter);
 app.use("/api/tags", tagsRouter);
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(openapiDocument));
